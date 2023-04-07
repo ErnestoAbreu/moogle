@@ -6,12 +6,22 @@ public static class Moogle
     {
         Vector queryTF_IDF = TF_IDF.ComputeQueryTF_IDF(query);
 
-        SearchItem[] items = new SearchItem[3]
+        (double score, int index)[] score = TF_IDF.VectorialModel(queryTF_IDF);
+
+        Array.Sort(score);
+
+        int counter = 0;
+        for (int i = score.Length - 1; i >= 0; --i)
         {
-            new SearchItem("Hello World", "Lorem ipsum dolor sit amet", 0.9f),
-            new SearchItem("Hello World", "Lorem ipsum dolor sit amet", 0.5f),
-            new SearchItem("Hello World", "Lorem ipsum dolor sit amet", 0.1f),
-        };
+            if (score[i].score != 0)
+                counter++;
+        }
+        SearchItem[] items = new SearchItem[counter];
+
+        int k = 0;
+        for (int i = score.Length - 1; i >= score.Length - counter; i--){
+            items[k++] = new SearchItem(TF_IDF.documents[score[i].index], "Lorem ipsum dolor sit amet", (float)score[i].score);
+        }
 
         return new SearchResult(items, query);
     }

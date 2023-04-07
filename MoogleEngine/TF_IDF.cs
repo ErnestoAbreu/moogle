@@ -4,8 +4,31 @@ public class TF_IDF
 {
     public static Matrix tf_idf = new Matrix(0, 0);
     public static Vector idf = new Vector(0);
+    public static string[] documents = {};
     public static Dictionary<string, int> Document = new Dictionary<string, int>();
     public static Dictionary<string, int> Word = new Dictionary<string, int>();
+
+    public static (double, int)[] VectorialModel(Vector queryTF_IDF)
+    {
+        (double, int)[] vectorialModel = new (double, int)[tf_idf.columns];
+
+        for (int j = 0; j < tf_idf.columns; j++)
+        {
+            Vector v = new Vector(tf_idf.rows);
+            for (int i = 0; i < tf_idf.rows; i++)
+            {
+                v[i] = tf_idf[i, j];
+            }
+            double score = 0;
+            
+            if(queryTF_IDF.Module() * v.Module() != 0)
+                 score = Vector.Dot_Product(queryTF_IDF, v) / (queryTF_IDF.Module() * v.Module());
+
+            vectorialModel[j] = (score, j);
+        }
+
+        return vectorialModel;
+    }
 
     public static Vector ComputeQueryTF_IDF(string query)
     {
@@ -16,13 +39,20 @@ public class TF_IDF
         double maxTF = 1;
         foreach (string word in text)
         {
-            queryTF_IDF[Word[word]]++;
-            maxTF = Math.Max(maxTF, queryTF_IDF[Word[word]]);
+            if (Word.ContainsKey(word))
+            {
+                queryTF_IDF[Word[word]]++;
+                maxTF = Math.Max(maxTF, queryTF_IDF[Word[word]]);
+            }
         }
 
-        foreach (string word in text){
-            queryTF_IDF[Word[word]] /= maxTF;
-            queryTF_IDF[Word[word]] *= idf[Word[word]];
+        foreach (string word in text)
+        {
+            if (Word.ContainsKey(word))
+            {
+                queryTF_IDF[Word[word]] /= maxTF;
+                queryTF_IDF[Word[word]] *= idf[Word[word]];
+            }
         }
 
         return queryTF_IDF;
@@ -30,7 +60,7 @@ public class TF_IDF
 
     public static void Compute()
     {
-        string[] documents = DocumentReader.DocumentsList("..\\Content");
+        documents = DocumentReader.DocumentsList("..\\Content");
         int numberOfDocuments = documents.Length;
 
         for (int i = 0; i < numberOfDocuments; i++)

@@ -6,7 +6,7 @@ public class DocumentReader
     {
         char[] separator = { ' ', ',', '.', ':', ';', '\t', '\n' };
 
-        string[] words = text.Split(separator);
+        string[] words = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
         List<string> wordsList = new List<string>();
 
         for (int i = 0; i < words.Length; i++)
