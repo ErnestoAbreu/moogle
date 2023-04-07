@@ -4,7 +4,7 @@ public static class Moogle
 {
     public static SearchResult Query(string query)
     {
-        // Modifique este método para responder a la búsqueda
+        Vector queryTF_IDF = TF_IDF.ComputeQueryTF_IDF(query);
 
         SearchItem[] items = new SearchItem[3]
         {

@@ -2,8 +2,8 @@ namespace MoogleEngine;
 
 public class Matrix
 {
-    private int rows;
-    private int columns;
+    public int rows;
+    public int columns;
     public double[,] matrix;
 
     // Constructor de la matriz

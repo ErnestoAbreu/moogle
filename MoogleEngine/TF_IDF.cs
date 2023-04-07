@@ -3,12 +3,35 @@ namespace MoogleEngine;
 public class TF_IDF
 {
     public static Matrix tf_idf = new Matrix(0, 0);
+    public static Vector idf = new Vector(0);
+    public static Dictionary<string, int> Document = new Dictionary<string, int>();
+    public static Dictionary<string, int> Word = new Dictionary<string, int>();
+
+    public static Vector ComputeQueryTF_IDF(string query)
+    {
+        Vector queryTF_IDF = new Vector(tf_idf.rows);
+
+        string[] text = DocumentReader.GetWords(query);
+
+        double maxTF = 1;
+        foreach (string word in text)
+        {
+            queryTF_IDF[Word[word]]++;
+            maxTF = Math.Max(maxTF, queryTF_IDF[Word[word]]);
+        }
+
+        foreach (string word in text){
+            queryTF_IDF[Word[word]] /= maxTF;
+            queryTF_IDF[Word[word]] *= idf[Word[word]];
+        }
+
+        return queryTF_IDF;
+    }
 
     public static void Compute()
     {
         string[] documents = DocumentReader.DocumentsList("..\\Content");
         int numberOfDocuments = documents.Length;
-        Dictionary<string, int> Document = new Dictionary<string, int>();
 
         for (int i = 0; i < numberOfDocuments; i++)
         {
@@ -17,7 +40,7 @@ public class TF_IDF
 
         string[] words = DocumentReader.WordsList(documents);
         int numberOfWords = words.Length;
-        Dictionary<string, int> Word = new Dictionary<string, int>();
+
         for (int i = 0; i < numberOfWords; i++)
         {
             Word[words[i]] = i;
@@ -25,6 +48,7 @@ public class TF_IDF
 
         Matrix TF = ComputeTF(Document, Word);
         Vector IDF = ComputeIDF(Document, Word);
+        idf = IDF;
 
         Matrix TF_IDF = new Matrix(numberOfWords, numberOfDocuments);
 
@@ -44,7 +68,7 @@ public class TF_IDF
 
         foreach (string documentName in Document.Keys)
         {
-            string[] text = DocumentReader.GetWords(documentName);
+            string[] text = DocumentReader.GetWords(File.ReadAllText(documentName));
 
             double maxTF = 1;
             foreach (string word in text)
@@ -72,7 +96,7 @@ public class TF_IDF
         foreach (string documentName in Document.Keys)
         {
             Dictionary<string, bool> Mark = new Dictionary<string, bool>();
-            string[] text = DocumentReader.GetWords(documentName);
+            string[] text = DocumentReader.GetWords(File.ReadAllText(documentName));
 
             foreach (string word in text)
             {

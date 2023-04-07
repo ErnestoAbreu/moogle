@@ -2,11 +2,10 @@ namespace MoogleEngine;
 
 public class DocumentReader
 {
-    public static string[] GetWords(string path)
+    public static string[] GetWords(string text)
     {
         char[] separator = { ' ', ',', '.', ':', ';', '\t', '\n' };
 
-        string text = File.ReadAllText(path);
         string[] words = text.Split(separator);
         List<string> wordsList = new List<string>();
 
@@ -69,7 +68,7 @@ public class DocumentReader
 
         foreach (string name in documents)
         {
-            string[] words = GetWords(name);
+            string[] words = GetWords(File.ReadAllText(name));
 
             foreach (string word in words)
                 Word[word] = true;
