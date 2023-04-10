@@ -16,6 +16,7 @@ public class Vector : Matrix
         set { matrix[0, i] = value; }
     }
 
+    /* Producto escalar entre dos vectores */
     static public double Dot_Product(Vector a, Vector b)
     {
         if (a.Dimensions != b.Dimensions)
@@ -28,6 +29,7 @@ public class Vector : Matrix
         return dot_product;
     }
 
+    /* Modulo de un vector */
     public double Module()
     {
         double module = 0;

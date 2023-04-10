@@ -4,7 +4,8 @@ public class TF_IDF
 {
     public static Matrix tf_idf = new Matrix(0, 0);
     public static Vector idf = new Vector(0);
-    public static string[] documents = {};
+    public static string[] documents = { };
+    public static string[] words = {};
     public static Dictionary<string, int> Document = new Dictionary<string, int>();
     public static Dictionary<string, int> Word = new Dictionary<string, int>();
 
@@ -20,9 +21,9 @@ public class TF_IDF
                 v[i] = tf_idf[i, j];
             }
             double score = 0;
-            
-            if(queryTF_IDF.Module() * v.Module() != 0)
-                 score = Vector.Dot_Product(queryTF_IDF, v) / (queryTF_IDF.Module() * v.Module());
+
+            if (queryTF_IDF.Module() * v.Module() != 0)
+                score = Vector.Dot_Product(queryTF_IDF, v) / (queryTF_IDF.Module() * v.Module());
 
             vectorialModel[j] = (score, j);
         }
@@ -68,7 +69,7 @@ public class TF_IDF
             Document[documents[i]] = i;
         }
 
-        string[] words = DocumentReader.WordsList(documents);
+        words = DocumentReader.WordsList(documents);
         int numberOfWords = words.Length;
 
         for (int i = 0; i < numberOfWords; i++)

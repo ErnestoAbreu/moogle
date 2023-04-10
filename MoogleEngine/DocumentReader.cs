@@ -2,11 +2,12 @@ namespace MoogleEngine;
 
 public class DocumentReader
 {
+    /* Devuelve un array con las palabras del text */
     public static string[] GetWords(string text)
     {
         char[] separator = { ' ', ',', '.', ':', ';', '\t', '\n' };
-
         string[] words = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
         List<string> wordsList = new List<string>();
 
         for (int i = 0; i < words.Length; i++)
@@ -22,6 +23,7 @@ public class DocumentReader
         return words;
     }
 
+    /* Le quita los caracteres extraños a las palabras */
     private static string Normalize(string word)
     {
         string newWord = "";
@@ -31,9 +33,10 @@ public class DocumentReader
                 newWord += word[i];
         }
 
-        return newWord;
+        return newWord.ToLower();
     }
 
+    /* Devuelve true si el caracter es valido en una palabra*/
     private static bool IsLetter(char c)
     {
         return (c >= 'a' && c <= 'z')
@@ -62,6 +65,7 @@ public class DocumentReader
             || c == '9';
     }
 
+    /* Devuelve un array con las palabras de un documento */
     public static string[] WordsList(string[] documents)
     {
         Dictionary<string, bool> Word = new Dictionary<string, bool>();
@@ -81,7 +85,7 @@ public class DocumentReader
 
         return wordsList;
     }
-
+    /* Devuelve un array con los nombres de los documentos de una direccion */
     public static string[] DocumentsList(string path)
     {
         return Directory.GetFiles(path, "*.txt");

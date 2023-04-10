@@ -449,3 +449,4 @@ $RECYCLE.BIN/
 ##
 .vscode/*
 .editorconfig
+.config/dotnet-tools.json

@@ -16,9 +16,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
+/*  */
 Moogle.Testing();
 
 TF_IDF.Compute();
+/*  */
 
 app.UseStaticFiles();
 
