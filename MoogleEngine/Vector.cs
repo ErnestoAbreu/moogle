@@ -10,19 +10,19 @@ public class Vector : Matrix
         this.Dimensions = N;
     }
 
-    public double this[int i]
+    public float this[int i]
     {
         get { return matrix[0, i]; }
         set { matrix[0, i] = value; }
     }
 
     /* Producto escalar entre dos vectores */
-    static public double Dot_Product(Vector a, Vector b)
+    static public float Dot_Product(Vector a, Vector b)
     {
         if (a.Dimensions != b.Dimensions)
             return 0;
 
-        double dot_product = 0;
+        float dot_product = 0;
         for (int i = 0; i < a.Dimensions; ++i)
             dot_product += a[i] * b[i];
 
@@ -30,13 +30,13 @@ public class Vector : Matrix
     }
 
     /* Modulo de un vector */
-    public double Module()
+    public float Module()
     {
-        double module = 0;
+        float module = 0;
         for (int i = 0; i < this.Dimensions; i++)
         {
             module += this[i] * this[i];
         }
-        return Math.Sqrt(module);
+        return (float)Math.Sqrt(module);
     }
 }

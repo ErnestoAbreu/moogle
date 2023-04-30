@@ -17,9 +17,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 /*  */
-Moogle.Testing();
+Debug.Write();
+Debug.Write("====Starting App====");
 
 TF_IDF.Compute();
+
+Moogle.Testing();
 /*  */
 
 app.UseStaticFiles();

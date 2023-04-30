@@ -4,18 +4,18 @@ public class Matrix
 {
     public int rows;
     public int columns;
-    public double[,] matrix;
+    public float[,] matrix;
 
     // Constructor de la matriz
     public Matrix(int rows, int columns)
     {
         this.rows = rows;
         this.columns = columns;
-        this.matrix = new double[rows, columns];
+        this.matrix = new float[rows, columns];
     }
 
     // Definicion del operador indizador
-    public double this[int i, int j]
+    public float this[int i, int j]
     {
         get { return matrix[i, j]; }
         set { matrix[i, j] = value; }
@@ -43,7 +43,7 @@ public class Matrix
     }
 
     // Definicion de multiplicacion de un escalar por una matriz
-    public static Matrix operator *(double x, Matrix A)
+    public static Matrix operator *(float x, Matrix A)
     {
         Matrix C = new Matrix(A.rows, A.columns);
 

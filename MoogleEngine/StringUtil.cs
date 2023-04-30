@@ -2,7 +2,7 @@ namespace MoogleEngine;
 
 public class StringUtil
 {
-    public static double EditDistance(string a, string b)
+    public static float EditDistance(string a, string b)
     {
         int[,] dp = new int[a.Length + 1, b.Length + 1];
         for (int i = 0; i <= a.Length; i++)
@@ -24,19 +24,19 @@ public class StringUtil
                     }
                 }
             }
-        return (double)dp[a.Length, b.Length];
+        return (float)dp[a.Length, b.Length];
     }
 
-    public static double LongestCommonPrefix(string a, string b)
+    public static float LongestCommonPrefix(string a, string b)
     {
         for (int i = 0; i < Math.Min(a.Length, b.Length); i++)
             if (a[i] != b[i])
-                return (double)(i + 1);
+                return (float)(i + 1);
 
-        return (double)Math.Min(a.Length, b.Length) + 1;
+        return (float)Math.Min(a.Length, b.Length) + 1;
     }
 
-    public static double Distance(string a, string b)
+    public static float Distance(string a, string b)
     {
         return EditDistance(a, b) / LongestCommonPrefix(a, b);
     }
@@ -50,10 +50,10 @@ public class StringUtil
         foreach (string word in DocumentReader.GetWords(query))
         {
             string realWord = word;
-            double minDistance = 1000;
+            float minDistance = 1000;
             foreach (string otherWord in TF_IDF.words)
             {
-                double distance = Distance(word, otherWord);
+                float distance = Distance(word, otherWord);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
