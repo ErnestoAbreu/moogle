@@ -2,7 +2,6 @@ namespace MoogleEngine;
 
 public class DocumentReader
 {
-    
     /* Devuelve un array con las palabras del text */
     public static string[] GetWords(string text)
     {
@@ -86,7 +85,7 @@ public class DocumentReader
 
         return wordsList;
     }
-    
+
     /* Devuelve un array con los nombres de los documentos de una direccion */
     public static string[] DocumentsList(string path)
     {

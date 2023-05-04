@@ -48,12 +48,14 @@ public class TF_IDF
             }
         }
 
+        Dictionary<string, bool> Mark = new Dictionary<string, bool>();
         foreach (string word in text)
         {
-            if (Word.ContainsKey(word))
+            if (!Mark.ContainsKey(word))
             {
                 queryTF_IDF[Word[word]] /= maxTF;
                 queryTF_IDF[Word[word]] *= idf[Word[word]];
+                Mark[word] = true;
             }
         }
 
@@ -124,11 +126,12 @@ public class TF_IDF
                 TF[Word[word], Document[documentName]]++;
                 maxTF = Math.Max(maxTF, TF[Word[word], Document[documentName]]);
             }
-            
-            Dictionary<string,bool> Mark = new Dictionary<string, bool>();
+
+            Dictionary<string, bool> Mark = new Dictionary<string, bool>();
             foreach (string word in text)
             {
-                if(!Mark.ContainsKey(word)){
+                if (!Mark.ContainsKey(word))
+                {
                     TF[Word[word], Document[documentName]] /= maxTF;
                     Mark[word] = true;
                 }
@@ -165,6 +168,9 @@ public class TF_IDF
                 IDF[i] = 0;
             else
                 IDF[i] = (float)Math.Log10(numberOfDocuments / (IDF[i]));
+
+            if(IDF[i] < 0.7)
+                IDF[i] = 0;
         }
 
         return IDF;

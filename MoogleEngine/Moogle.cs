@@ -24,8 +24,10 @@ public static class Moogle
             if (scoreList[i].score > (1e-9))
                 counter++;
 
+        counter = Math.Min(counter, 20);
+
         /* Escogiendo el resultado de la busqueda */
-        Debug.Write("Resultado: ");
+        // Debug.Write("Resultado: ");
         SearchItem[] items = new SearchItem[counter];
 
         int k = 0;
@@ -36,14 +38,14 @@ public static class Moogle
                 title += TF_IDF.documents[scoreList[i].index][j];
 
             /* Obteniendo el snippet */
-            // string snippet = File.ReadAllText(TF_IDF.documents[scoreList[i].index]);
+            string snippet = StringUtil.GetSnippet(query, "..\\Content\\" + title + ".txt");
 
             items[k++] = new SearchItem(
                 title,
-                "Lorem ipsum dolor sit amet",
+                snippet,
                 (float)scoreList[i].score
             );
-            Debug.Write("{0}  " + title, (float)scoreList[i].score);
+            // Debug.Write("{0}  " + title, (float)scoreList[i].score);
         }
 
         Debug.Write("Busqueda realizada en: {0}s", Debug.GetTime());
@@ -53,7 +55,7 @@ public static class Moogle
 
     public static void Testing()
     {
-        // int index = TF_IDF.Word["harry"];
+        // int index = TF_IDF.Word["tronos"];
         // Console.Write(TF_IDF.idf[index] + "  ");
         // Console.WriteLine(index);
 
