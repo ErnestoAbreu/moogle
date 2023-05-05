@@ -101,7 +101,7 @@ public class TF_IDF
 
         Console.WriteLine("- TF calculado.");
 
-        Console.WriteLine(" - Calculando IDF.");
+        Console.WriteLine("- Calculando IDF.");
 
         Vector IDF = ComputeIDF();
         idf = IDF;

@@ -2,9 +2,10 @@ namespace MoogleEngine;
 
 public class StringUtil
 {
-    /* Calcula el EditDistance para dos cadenas de caracteres */
     public static float EditDistance(string a, string b)
     {
+        /* Calcula el EditDistance para dos cadenas de caracteres */
+
         int[,] dp = new int[a.Length + 1, b.Length + 1];
         for (int i = 0; i <= a.Length; i++)
             for (int j = 0; j <= b.Length; j++)
@@ -29,9 +30,10 @@ public class StringUtil
         return (float)dp[a.Length, b.Length];
     }
 
-    /* Calcula el LongesCommonPrefix para dos cadenas de caracteres */
     public static float LongestCommonPrefix(string a, string b)
     {
+        /* Calcula el LongestCommonPrefix para dos cadenas de caracteres */
+
         for (int i = 0; i < Math.Min(a.Length, b.Length); i++)
             if (a[i] != b[i])
                 return (float)(i + 1);
@@ -41,12 +43,15 @@ public class StringUtil
 
     public static float Distance(string a, string b)
     {
+        /* Calcula la distancia entre dos cadenas de caracteres */
+
         return EditDistance(a, b) / LongestCommonPrefix(a, b);
     }
 
-    /* Devuelve la sugerencia para una consulta */
     public static string GetSuggetion(string query)
     {
+        /* Devuelve la sugerencia para una consulta */
+
         string suggestion = "";
         bool suggestionNecessary = false;
 
@@ -78,9 +83,10 @@ public class StringUtil
         return suggestion;
     }
 
-    /* Devuelve el snippet de una documento para una consulta */
     public static string GetSnippet(string query, string title)
     {
+        /* Devuelve el snippet de un documento para una consulta */
+        
         string snippet = "";
 
         Vector queryTF_IDF = TF_IDF.ComputeQueryTF_IDF(query);

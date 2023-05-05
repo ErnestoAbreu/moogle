@@ -23,13 +23,14 @@ public static class Moogle
         /* Quitando los que no tienen relevancia ninguna */
         int counter = 0;
         for (int i = scoreList.Length - 1; i >= 0; --i)
-            if (scoreList[i].score > (1e-9))
+            if (scoreList[i].score > (1e-6))
                 counter++;
 
         counter = Math.Min(counter, 20);
 
         /* Escogiendo el resultado de la busqueda */
-        // Debug.Write("Resultado: ");
+        Console.WriteLine("Resultados: ");
+        
         SearchItem[] items = new SearchItem[counter];
 
         int k = 0;
@@ -47,7 +48,8 @@ public static class Moogle
                 snippet,
                 (float)scoreList[i].score
             );
-            // Debug.Write("{0}  " + title, (float)scoreList[i].score);
+
+            Console.WriteLine("{0}  " + title, (float)scoreList[i].score);
         }
 
         Console.WriteLine("Busqueda realizada en: {0}s.\n", watch.ElapsedMilliseconds / 1000);
