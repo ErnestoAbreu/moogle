@@ -6,7 +6,7 @@ public class Matrix
     public int columns;
     public float[,] matrix;
 
-    // Constructor de la matriz
+    /* Constructor de la matriz */
     public Matrix(int rows, int columns)
     {
         this.rows = rows;
@@ -14,19 +14,19 @@ public class Matrix
         this.matrix = new float[rows, columns];
     }
 
-    // Definicion del operador indizador
+    /* Definicion del operador indizador */
     public float this[int i, int j]
     {
         get { return matrix[i, j]; }
         set { matrix[i, j] = value; }
     }
 
-    // Definicion de multiplicacion de matrices
+    /* Definicion de multiplicacion de matrices */
     public static Matrix operator *(Matrix A, Matrix B)
     {
         if (A.columns != B.rows)
         {
-            // Exception
+            /* Exception */
             return new Matrix(0, 0);
         }
         else
@@ -42,7 +42,7 @@ public class Matrix
         }
     }
 
-    // Definicion de multiplicacion de un escalar por una matriz
+    /* Definicion de multiplicacion de un escalar por una matriz */
     public static Matrix operator *(float x, Matrix A)
     {
         Matrix C = new Matrix(A.rows, A.columns);
@@ -54,7 +54,7 @@ public class Matrix
         return C;
     }
 
-    // Definicion de matriz transpuesta
+    /* Definicion de matriz transpuesta */
     public void Transpose()
     {
         Matrix newMatrix = new Matrix(this.columns, this.rows);
@@ -64,7 +64,7 @@ public class Matrix
                 newMatrix[j, i] = this[i, j];
     }
 
-    // Imprime la matriz
+    /* Imprime la matriz */
     public void debug()
     {
         for (int i = 0; i < this.rows; ++i)

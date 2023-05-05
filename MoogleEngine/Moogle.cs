@@ -1,12 +1,14 @@
 ﻿namespace MoogleEngine;
+using System.Diagnostics;
 
 public static class Moogle
 {
     public static SearchResult Query(string query)
     {
-        Debug.StartTime();
-        Debug.Write("==== Iniciando una nueva busqueda====");
-        Debug.Write(query);
+        Stopwatch watch = Stopwatch.StartNew();
+
+        Console.WriteLine("\n==== Iniciando una nueva busqueda ====\n");
+        Console.WriteLine("Consulta: " + query);
 
         /* Obteneniendo la sugerencia */
         string suggestion = StringUtil.GetSuggetion(query);
@@ -34,8 +36,8 @@ public static class Moogle
         for (int i = scoreList.Length - 1; i >= scoreList.Length - counter; i--)
         {
             string title = "";
-            for (int j = 11; j < TF_IDF.documents[scoreList[i].index].Length - 4; j++)
-                title += TF_IDF.documents[scoreList[i].index][j];
+            for (int j = 11; j < TF_IDF.documentsName[scoreList[i].index].Length - 4; j++)
+                title += TF_IDF.documentsName[scoreList[i].index][j];
 
             /* Obteniendo el snippet */
             string snippet = StringUtil.GetSnippet(query, "..\\Content\\" + title + ".txt");
@@ -48,22 +50,13 @@ public static class Moogle
             // Debug.Write("{0}  " + title, (float)scoreList[i].score);
         }
 
-        Debug.Write("Busqueda realizada en: {0}s", Debug.GetTime());
+        Console.WriteLine("Busqueda realizada en: {0}s.\n", watch.ElapsedMilliseconds / 1000);
 
         return new SearchResult(items, suggestion);
     }
 
     public static void Testing()
     {
-        // int index = TF_IDF.Word["tronos"];
-        // Console.Write(TF_IDF.idf[index] + "  ");
-        // Console.WriteLine(index);
-
-        // foreach (string title in TF_IDF.documents)
-        // {
-        //     Console.Write(title + ": ");
-        //     Console.Write(TF_IDF.tf[index, TF_IDF.Document[title]] + "  ");
-        //     Console.WriteLine(TF_IDF.tf_idf[index, TF_IDF.Document[title]]);
-        // }
+       /* Esta método no cumple ningun propósito esencial en el funcionamiento de la aplicación */
     }
 }

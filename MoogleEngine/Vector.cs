@@ -16,10 +16,11 @@ public class Vector : Matrix
         set { matrix[0, i] = value; }
     }
 
-    /* Producto escalar entre dos vectores */
+    /* Definicion de producto escalar entre dos vectores */
     static public float Dot_Product(Vector a, Vector b)
     {
         if (a.Dimensions != b.Dimensions)
+            /* Exception */
             return 0;
 
         float dot_product = 0;
@@ -29,7 +30,7 @@ public class Vector : Matrix
         return dot_product;
     }
 
-    /* Modulo de un vector */
+    /* Definicion de modulo de un vector */
     public float Module()
     {
         float module = 0;

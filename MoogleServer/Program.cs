@@ -16,13 +16,16 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
-/*  */
-Debug.Write();
-Debug.Write("====Starting App====");
+/* Procesos que se corren antes de encender el Moogle! */
+
+Console.WriteLine("\n\n=====Starting App=====\n");
 
 TF_IDF.Compute();
 
 Moogle.Testing();
+
+Console.WriteLine("=====App Started=====\n");
+
 /*  */
 
 app.UseStaticFiles();

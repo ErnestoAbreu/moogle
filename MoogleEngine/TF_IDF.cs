@@ -1,11 +1,12 @@
 namespace MoogleEngine;
+using System.Diagnostics;
 
 public class TF_IDF
 {
     public static Matrix tf_idf = new Matrix(0, 0);
     public static Matrix tf = new Matrix(0, 0);
     public static Vector idf = new Vector(0);
-    public static string[] documents = { };
+    public static string[] documentsName = { };
     public static string[] words = { };
     public static Dictionary<string, int> Document = new Dictionary<string, int>();
     public static Dictionary<string, int> Word = new Dictionary<string, int>();
@@ -62,57 +63,69 @@ public class TF_IDF
         return queryTF_IDF;
     }
 
-    /* Precalculando el TF_IDF */
     public static void Compute()
     {
-        Debug.StartTime();
-        Debug.Write("1. Calculando TF_IDF");
+        /* Precalcula el TF_IDF */
 
-        // Lista de documentos
-        documents = DocumentReader.DocumentsList("..\\Content");
-        int numberOfDocuments = documents.Length;
+        Stopwatch watch = Stopwatch.StartNew();
+        Console.WriteLine("1. Calculando TF_IDF:");
 
-        // Diccionario [nombre de documento => indice]
+        Console.WriteLine("- Leyendo documentos.");
+
+        /* Arreglo con los nombres de los documentos */
+        documentsName = DocumentReader.DocumentsNameList("..\\Content");
+        int numberOfDocuments = documentsName.Length;
+
+        /* Diccionario [nombre de documento => indice] */
         for (int i = 0; i < numberOfDocuments; i++)
         {
-            Document[documents[i]] = i;
+            Document[documentsName[i]] = i;
         }
 
-        // Lista de todas las palabras de los documentos
-        words = DocumentReader.WordsList(documents);
+        /* Arreglo con las palabras del los documentos */
+        words = DocumentReader.WordsList(documentsName);
         int numberOfWords = words.Length;
 
-        // Diccionario [palabra => indice]
+        /* Diccionario [palabra => indice] */
         for (int i = 0; i < numberOfWords; i++)
         {
             Word[words[i]] = i;
         }
-        Debug.Write("- Leyendo los documentos.");
+
+        Console.WriteLine("- Documentos leidos.");
+
+        Console.WriteLine("- Calculando TF.");
 
         Matrix TF = ComputeTF();
-        Debug.Write("- TF calculado.");
         tf = TF;
+
+        Console.WriteLine("- TF calculado.");
+
+        Console.WriteLine(" - Calculando IDF.");
+
         Vector IDF = ComputeIDF();
-        Debug.Write("- IDF calculado.");
         idf = IDF;
+
+        Console.WriteLine("- IDF calculado.");
 
         Matrix TF_IDF = new Matrix(numberOfWords, numberOfDocuments);
 
-        // Multiplicar TF por IDF
+        /* Multiplicar TF por IDF */
         for (int j = 0; j < numberOfDocuments; j++)
             for (int i = 0; i < numberOfWords; i++)
                 TF_IDF[i, j] = TF[i, j] * IDF[i];
 
         tf_idf = TF_IDF;
 
-        Debug.Write("TF_IDF calculado en {0}s.", Debug.GetTime());
-        Debug.Write();
+        Console.WriteLine("TF_IDF calculado en {0}s.\n", watch.ElapsedMilliseconds / 1000);
     }
 
     public static Matrix ComputeTF()
     {
-        int numberOfDocuments = Document.Count;
-        int numberOfWords = Word.Count;
+        /* Calcula el TF */
+
+        int numberOfDocuments = documentsName.Length;
+        int numberOfWords = words.Length;
 
         Matrix TF = new Matrix(numberOfWords, numberOfDocuments);
 
@@ -128,6 +141,7 @@ public class TF_IDF
             }
 
             Dictionary<string, bool> Mark = new Dictionary<string, bool>();
+
             foreach (string word in text)
             {
                 if (!Mark.ContainsKey(word))
@@ -137,19 +151,23 @@ public class TF_IDF
                 }
             }
         }
+
         return TF;
     }
 
     public static Vector ComputeIDF()
     {
-        int numberOfDocuments = Document.Count;
-        int numberOfWords = Word.Count;
+        /* Calcula el TF */
+
+        int numberOfDocuments = documentsName.Length;
+        int numberOfWords = words.Length;
 
         Vector IDF = new Vector(numberOfWords);
 
         foreach (string documentName in Document.Keys)
         {
             Dictionary<string, bool> Mark = new Dictionary<string, bool>();
+
             string[] text = DocumentReader.GetWords(File.ReadAllText(documentName));
 
             foreach (string word in text)
@@ -164,12 +182,11 @@ public class TF_IDF
 
         for (int i = 0; i < numberOfWords; i++)
         {
-            if (IDF[i] == 0)
-                IDF[i] = 0;
-            else
+            if (IDF[i] != 0)
                 IDF[i] = (float)Math.Log10(numberOfDocuments / (IDF[i]));
 
-            if(IDF[i] < 0.7)
+            /* Acotamos el IDF para quitar toda la relevancia a las stopwords */
+            if (IDF[i] < 0.7)
                 IDF[i] = 0;
         }
 

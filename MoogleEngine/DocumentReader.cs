@@ -2,9 +2,9 @@ namespace MoogleEngine;
 
 public class DocumentReader
 {
-    /* Devuelve un array con las palabras del text */
     public static string[] GetWords(string text)
     {
+        /* Devuelve un arreglo con las palabras del texto */
         char[] separator = { ' ', ',', '.', ':', ';', '\t', '\n' };
         string[] words = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
@@ -23,9 +23,9 @@ public class DocumentReader
         return words;
     }
 
-    /* Le quita los caracteres extraños a las palabras */
     private static string Normalize(string word)
     {
+        /* Le quita los caracteres extraños a la palabra */
         string newWord = "";
         for (int i = 0; i < word.Length; i++)
         {
@@ -36,9 +36,9 @@ public class DocumentReader
         return newWord.ToLower();
     }
 
-    /* Devuelve true si el caracter es valido en una palabra*/
     private static bool IsLetter(char c)
     {
+        /* Devuelve true si el caracter es valido en una palabra */
         return (c >= 'a' && c <= 'z')
             || (c >= 'A' && c <= 'Z')
             || c == 'á'
@@ -65,12 +65,13 @@ public class DocumentReader
             || c == '9';
     }
 
-    /* Devuelve un array con las palabras de un documento */
-    public static string[] WordsList(string[] documents)
+    public static string[] WordsList(string[] documentsName)
     {
+        /* Devuelve un arreglo con las palabras de los documentos */
+
         Dictionary<string, bool> Word = new Dictionary<string, bool>();
 
-        foreach (string name in documents)
+        foreach (string name in documentsName)
         {
             string[] words = GetWords(File.ReadAllText(name));
 
@@ -86,9 +87,10 @@ public class DocumentReader
         return wordsList;
     }
 
-    /* Devuelve un array con los nombres de los documentos de una direccion */
-    public static string[] DocumentsList(string path)
+    public static string[] DocumentsNameList(string path)
     {
+        /* Devuelve un arreglo con los nombres de los documentos de una direccion */
+
         return Directory.GetFiles(path, "*.txt");
     }
 }
