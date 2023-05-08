@@ -23,33 +23,35 @@ public static class Moogle
         /* Quitando los que no tienen relevancia ninguna */
         int counter = 0;
         for (int i = scoreList.Length - 1; i >= 0; --i)
-            if (scoreList[i].score > (1e-6))
+            if (scoreList[i].score > (1e-9))
                 counter++;
 
-        counter = Math.Min(counter, 20);
+        counter = Math.Min(counter, 30);
 
         /* Escogiendo el resultado de la busqueda */
         Console.WriteLine("Resultados: ");
-        
-        SearchItem[] items = new SearchItem[counter];
 
-        int k = 0;
-        for (int i = scoreList.Length - 1; i >= scoreList.Length - counter; i--)
+        SearchItem[] items = new SearchItem[Math.Max(1, counter)];
+        if (counter == 0)
         {
-            string title = "";
-            for (int j = 11; j < TF_IDF.documentsName[scoreList[i].index].Length - 4; j++)
-                title += TF_IDF.documentsName[scoreList[i].index][j];
+            items[0] = new SearchItem("No se encontró resultados para esta búsqueda.", "", 0);
+        }
+        else
+        {
+            int k = 0;
+            for (int i = scoreList.Length - 1; i >= scoreList.Length - counter; i--)
+            {
+                string title = "";
+                for (int j = 11; j < TF_IDF.documentsName[scoreList[i].index].Length - 4; j++)
+                    title += TF_IDF.documentsName[scoreList[i].index][j];
 
-            /* Obteniendo el snippet */
-            string snippet = StringUtil.GetSnippet(query, "..\\Content\\" + title + ".txt");
+                /* Obteniendo el snippet */
+                string snippet = StringUtil.GetSnippet(query, TF_IDF.documentsName[scoreList[i].index]);
 
-            items[k++] = new SearchItem(
-                title,
-                snippet,
-                (float)scoreList[i].score
-            );
+                items[k++] = new SearchItem(title, snippet, (float)scoreList[i].score);
 
-            Console.WriteLine("{0}  " + title, (float)scoreList[i].score);
+                Console.WriteLine("{0}  " + title, (float)scoreList[i].score);
+            }
         }
 
         Console.WriteLine("Busqueda realizada en: {0}s.\n", watch.ElapsedMilliseconds / 1000);
@@ -59,6 +61,6 @@ public static class Moogle
 
     public static void Testing()
     {
-       /* Esta método no cumple ningun propósito esencial en el funcionamiento de la aplicación */
+        /* Esta método no cumple ningun propósito esencial en el funcionamiento de la aplicación */
     }
 }

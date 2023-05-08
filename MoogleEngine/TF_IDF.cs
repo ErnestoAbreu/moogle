@@ -14,7 +14,7 @@ public class TF_IDF
     public static (float, int)[] VectorialModel(Vector queryTF_IDF)
     {
         /* Devuelve un arreglo que contiene para cada documento el coseno del angulo entre el vector de la query y el del documento */
-        
+
         (float, int)[] vectorialModel = new (float, int)[tf_idf.columns];
 
         for (int j = 0; j < tf_idf.columns; j++)
@@ -54,11 +54,14 @@ public class TF_IDF
         Dictionary<string, bool> Mark = new Dictionary<string, bool>();
         foreach (string word in text)
         {
-            if (!Mark.ContainsKey(word))
+            if (Word.ContainsKey(word))
             {
-                queryTF_IDF[Word[word]] /= maxTF;
-                queryTF_IDF[Word[word]] *= idf[Word[word]];
-                Mark[word] = true;
+                if (!Mark.ContainsKey(word))
+                {
+                    queryTF_IDF[Word[word]] /= maxTF;
+                    queryTF_IDF[Word[word]] *= idf[Word[word]];
+                    Mark[word] = true;
+                }
             }
         }
 
@@ -188,7 +191,7 @@ public class TF_IDF
                 IDF[i] = (float)Math.Log10(numberOfDocuments / (IDF[i]));
 
             /* Acotamos el IDF para quitar toda la relevancia a las stopwords */
-            if (IDF[i] < 0.7)
+            if (IDF[i] < 0.07)
                 IDF[i] = 0;
         }
 
