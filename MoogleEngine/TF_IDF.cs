@@ -191,7 +191,7 @@ public class TF_IDF
                 IDF[i] = (float)Math.Log10(numberOfDocuments / (IDF[i]));
 
             /* Acotamos el IDF para quitar toda la relevancia a las stopwords */
-            if (IDF[i] < 0.07)
+            if (IDF[i] < (float)Math.Log10((float)100 / (float)85))
                 IDF[i] = 0;
         }
 
