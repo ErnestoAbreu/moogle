@@ -13,6 +13,8 @@ public class TF_IDF
 
     public static (float, int)[] VectorialModel(Vector queryTF_IDF)
     {
+        /* Devuelve un arreglo que contiene para cada documento el coseno del angulo entre el vector de la query y el del documento */
+        
         (float, int)[] vectorialModel = new (float, int)[tf_idf.columns];
 
         for (int j = 0; j < tf_idf.columns; j++)
