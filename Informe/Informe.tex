@@ -1,0 +1,317 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{listings}
+
+\usepackage{xcolor}
+\usepackage{multicol}
+
+\usepackage{graphicx}
+
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+
+\usepackage{verbatim}
+
+\geometry{
+    left=2cm,
+    right=2cm,
+    top=2.5cm,
+    bottom=3.5cm
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\fancyhead[L]{\bf\large{Moogle!}\color{blue}\hrule}
+\setlength{\headheight}{40pt}
+\renewcommand{\headrulewidth}{0pt}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+	language=[Sharp]C,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{purple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+
+\renewcommand{\emph}{\textcolor{blue}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    
+    \begin{figure}[h]
+        \center
+        \includegraphics[width=5cm]{matcom.jpg}
+        
+        \Large Facultad de Matématica y Computación
+
+        \large Universidad de la Habana
+    \end{figure}
+
+    
+    \vspace{2cm}
+    
+
+    \vspace{2cm}
+
+    {\Huge\bf Proyecto de Programación I \par Moogle!}
+
+    
+    \vfill
+
+    \large Ernesto Abreu Peraza
+    
+    \small Grupo: C-121
+    
+    \small Curso: 2023
+\end{titlepage}
+
+\newpage
+
+\renewcommand{\abstractname}{Descripción}
+
+\begin{abstract}
+    Moogle! es una aplicación \textit{"totalmente original"} cuyo propósito es buscar inteligentemente un texto en un
+conjunto de documentos.
+
+Es una aplicación web, desarrollada con tecnología .NET Core 6.0, específicamente usando Blazor como
+framework web para la interfaz gráfica, y en el lenguaje C\#. La aplicación está dividida en dos componentes
+fundamentales:
+\begin{itemize}
+    \item \emph{MoogleServer} es un servidor web que renderiza la interfaz gráfica y sirve los resultados.
+    \item \emph{MoogleEngine} es una biblioteca de clases donde está... ehem... casi implementada la lógica del algoritmo de búsqueda.
+\end{itemize}
+\end{abstract}
+
+\section*{Correr y usar el proyecto}
+
+Para correr el proyecto debes usar el comando \emph{dotnet watch run --project MoogleServer} en Windows
+y \emph{make dev} en Linux. En la carpeta \emph{Content} deberán aparecer los documentos (en formato *.txt) en los que el
+usuario va a realizar la búsqueda. En la casilla donde aparece \textit{Introduzca la búsqueda} el usuario va a escribir
+que desea buscar y basta con apretar el botón \textit{Buscar} para que Moogle! haga su trabajo.
+
+
+\section*{Arquitectura del proyecto}
+
+\subsection*{Características de clases}
+
+\begin{itemize}
+    \item \emph{Moogle}: procesar consulta.
+    \item \emph{TF\_IDF}: calcular tf-idf para los documentos y para la query, calcular coseno del angulo entre dos vectores.
+    \item \emph{DocumentReader}: leer, normalizar y obtener de los documentos, título, texto y palabras.
+    \item \emph{StringUtil}: procesar, calcular, modificar y obtener informacion a partir de texto util para alguna de las funcionalidades de la aplicación.
+    \item \emph{Matrix}: Definir y multiplicar matrices
+    \item \emph{Vector}: Definir, calcular modulo y multiplicar vectores
+\end{itemize}
+
+\section*{Precálculo}
+
+Term frequency-Inverse document frequency (TF\_IDF) es una medida numérica que expresa cuan
+relevante es una palabra para un documento en una colección de documentos.
+
+\begin{eqnarray*}
+    TF\_IDF[t,d] = TF[t,d] * IDF[t] \\
+    TF[t,d] = \frac{f[t]}{maxFrequency} \\
+    IDF[t] = \log_{10}{\frac{numberOfDocuments}{Df[t]}}
+\end{eqnarray*}
+
+Siendo $t$ una palabra y $d$ un documento. $f[t]$ la frecuencia de la palabra $t$ en el documento $d$ 
+y $maxFrequency$ es el máximo de los $f[t]$. $numberOfDocuments$ el total de documentos y 
+$Df[t]$ es la cantidad de documentos en los que aparece la palabra $t$.
+
+\begin{itemize}
+    \item Cuando el programa empieza a correr se ejecuta el método \texttt{TF\_IDF.Compute()} del archivo
+    \texttt{TF\_IDF.cs}. Este método lee el texto de cada documento que aparece en la carpeta \emph{Content} y de el
+    extrae todas las palabras. Se calcula el \texttt{TF\_IDF} para cada palabra en cada documento
+
+\begin{lstlisting}
+public static void Compute()
+{
+    /* Precalcula el TF_IDF */
+    
+    /* Arreglo con los nombres de los documentos */
+    documentsName = DocumentReader.DocumentsNameList("..\\Content");
+    
+    int numberOfDocuments = documentsName.Length;
+   
+    /* Diccionario [nombre de documento => indice] */
+    for (int i = 0; i < numberOfDocuments; i++)
+    {
+        Document[documentsName[i]] = i;
+    }
+    
+    /* Arreglo con las palabras del los documentos */
+    words = DocumentReader.WordsList(documentsName);
+    
+    int numberOfWords = words.Length;
+    
+    /* Diccionario [palabra => indice] */
+    for (int i = 0; i < numberOfWords; i++)
+    {
+        Word[words[i]] = i;
+    }
+    
+    Matrix TF = ComputeTF();
+    tf = TF;
+    
+    Vector IDF = ComputeIDF();
+    idf = IDF;
+    
+    Matrix TF_IDF = new Matrix(numberOfWords, numberOfDocuments);
+    
+    /* Multiplicar TF por IDF */
+    for (int j = 0; j < numberOfDocuments; j++)
+        for (int i = 0; i < numberOfWords; i++)
+            TF_IDF[i, j] = TF[i, j] * IDF[i];
+    
+    tf_idf = TF_IDF;
+}
+\end{lstlisting}
+
+\item Los métodos \texttt{ComputeTF()} y \texttt{ComputeIDF()} calculan el TF y el IDF respectivamente.
+\end{itemize}
+
+\subsection*{Consulta}
+
+\begin{itemize}
+    \item Luego que la aplicación inicie, cuando se realize una consulta ( búsqueda ), el proyecto llama al método
+    \texttt{Moogle.Query()} del archivo \texttt{Moogle.cs} donde se calcula el TF\_IDF para la consulta a traves del
+    método \texttt{TF\_IDF.ComputeQueryTF\_IDF()} y se compara con el TF\_IDF de cada documento dandole
+    una puntuación a cada uno y devolviendo una lista con los nombres de los documentos que más
+    relevancia tienen. La puntuación sería el coseno del ángulo entre el vector formado con el TF\_IDF de la
+    consulta y el TF\_IDF del documento. La similitud de los documentos depende es mayor mientras mas
+    se acerca a 1 el coseno del angulo entre ellos, visto de otra forma mientras mas pequeño es el angulo
+    entre ambos. Para esto se utilizan dos fórmulas de dot product. Para dos vectores a y b: $dotProduct
+    = a_1 * b_1 + a_2 * b_2 + ... + a_n* b_n$ , $dotProduct = \cos(a,b) * |a|*|b|$.
+
+\begin{lstlisting}
+public static (float, int)[] VectorialModel(Vector queryTF_IDF)
+{
+    /* Devuelve un arreglo que contiene para cada documento el coseno del angulo
+    entre el vector de la query y el del documento */
+    (float, int)[] vectorialModel = new (float, int)[tf_idf.columns];
+    for (int j = 0; j < tf_idf.columns; j++)
+    {
+        Vector v = new Vector(tf_idf.rows);
+        for (int i = 0; i < tf_idf.rows; i++)
+        {
+            v[i] = tf_idf[i, j];
+        }
+        float score = 0;
+        if (queryTF_IDF.Module() * v.Module() != 0)
+        score = Vector.Dot_Product(queryTF_IDF, v) / (queryTF_IDF.Module() *
+        v.Module());
+        vectorialModel[j] = (score, j);
+    }
+    return vectorialModel;
+}
+...
+...
+...
+/* Definicion de producto escalar entre dos vectores */
+static public float Dot_Product(Vector a, Vector b)
+{
+    if (a.Dimensions != b.Dimensions)
+        /* Exception */
+        return 0;
+    
+    float dot_product = 0;
+    for (int i = 0; i < a.Dimensions; ++i)
+        dot_product += a[i] * b[i];
+    
+    return dot_product;
+}
+...
+...
+...
+/* Definicion de modulo de un vector */
+public float Module()
+{
+    float module = 0;
+    for (int i = 0; i < this.Dimensions; i++)
+    {
+        module += this[i] * this[i];
+    }
+    return (float)Math.Sqrt(module);
+}
+\end{lstlisting}
+
+\item También se muestra un fragmento por cada documento donde se puede apreciar en este una relación
+del documento con la consulta.
+
+\end{itemize}
+
+\subsection*{Funcionalidades extras}
+
+Otra funcionalidad del Moogle! es que dará una sugerencia de búsqueda en caso de que el usuario quizás
+cometió un error al escribir la consulta. Para esto usamos un algoritmo de Edit Distance conocido como
+Levenshtein distance y a este costo le dividimos por el Longest Common Prefix. El propósito de este último
+proviene de la idea de que es más probable equivocarse en las últimas letras que en las primeras. Así distra
+está más cerca de dijkstra que de citra.
+
+\begin{lstlisting}
+public static float Distance(string a, string b)
+{
+    /* Calcula la distancia entre dos cadenas de caracteres */
+    return EditDistance(a, b) / LongestCommonPrefix(a, b);
+}
+
+public static float EditDistance(string a, string b)
+{
+    /* Calcula el EditDistance para dos cadenas de caracteres */
+    int[,] dp = new int[a.Length + 1, b.Length + 1];
+    for (int i = 0; i <= a.Length; i++)
+        for (int j = 0; j <= b.Length; j++)
+        {
+            if (i == 0 || j == 0)
+            {
+                dp[i, j] = Math.Max(i, j);
+            }
+            else
+            {
+                dp[i, j] = Int32.MaxValue;
+                if (a[i - 1] == b[j - 1])
+                   dp[i, j] = dp[i - 1, j - 1];
+                else
+                {
+                    dp[i, j] = Math.Min(dp[i, j], dp[i - 1, j] + 1);
+                    dp[i, j] = Math.Min(dp[i, j], dp[i, j - 1] + 1);
+                    dp[i, j] = Math.Min(dp[i, j], dp[i - 1, j - 1] + 1);
+                }
+            }
+        }
+    return (float)dp[a.Length, b.Length];
+}
+
+public static float LongestCommonPrefix(string a, string b)
+{
+    /* Calcula el LongestCommonPrefix para dos cadenas de caracteres */
+    for (int i = 0; i < Math.Min(a.Length, b.Length); i++)
+        if (a[i] != b[i])
+            return (float)(i + 1);
+    
+    return (float)Math.Min(a.Length, b.Length) + 1;
+}
+\end{lstlisting}
+
+\end{document}
