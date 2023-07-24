@@ -1,0 +1,115 @@
+\documentclass[11pt]{beamer}
+\usetheme{Malmoe}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\author{Ernesto Abreu Peraza}
+\title{Moogle!}
+\institute{Universidad de la Habana} 
+\logo{[\includegraphics[width=1cm]{matcom.jpg}}
+\date{\today} 
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+% \renewcommand{\thesection}{\arabic{section}}
+
+\section{Introduccion}
+
+\begin{frame}{Introduccion}
+
+Moogle! es una aplicación ”totalmente original” cuyo propósito es buscar inteligentemente un texto en un conjunto de documentos.
+
+Es una aplicación web, desarrollada con tecnologia .NET Core 6.0, especificamente
+usando Blazor como framework web para la interfaz gráfica, y en el lenguaje C\#.
+
+\end{frame}
+
+\subsection{Correr y usar el proyecto}
+
+\begin{frame}{Correr y usar el proyecto}
+
+    \textbf{Abrir una terminal en la carpeta del proyecto y escribir lo siguiente:}
+    
+    \begin{itemize}
+        \item Linux:
+              \begin{itemize} \item \texttt{make dev} \end{itemize}
+        \item Windows:
+              \begin{itemize} \item \texttt{dotnet watch run --project MoogleServer}\end{itemize}
+    \end{itemize}
+
+\end{frame}
+
+\section{Arquitectura del proyecto}
+
+\subsection{Caracteristicas de clases}
+
+\begin{frame}{Caracteristicas de clases}
+    
+    \begin{itemize}
+        \item Moogle: procesar consulta.
+        \item TF\_IDF: calcular tf-idf para los documentos y para la query, calcular coseno del angulo entre dos vectores.
+        \item DocumentReader: leer, normalizar y obtener de los documentos, titulo, texto y palabras.
+        \item StringUtil: procesar, calcular, modificar y obtener informacion a partir de texto util para alguna de las funcionalidades de la aplicación.
+        \item Matrix: Definir y multiplicar matrices
+        \item Vector: Definir, calcular modulo y multiplicar vectores
+    \end{itemize}
+    
+\end{frame}
+
+\subsection{TF\_IDF}
+
+\begin{frame}{TF\_IDF}
+
+Term frequency-Inverse document frequency (TF IDF) es una medida numérica que expresa
+cuan relevante es una palabra para un documento en una colección de documentos.
+
+\begin{eqnarray*}
+    \mathrm{TF\_IDF}(t,d) = \mathrm{TF\_IDF}(t,d) \cdot \mathrm{IDF}(t) \\
+    \mathrm{TF}(t,d) = \frac{f[t]}{maxFrequency} \\
+    \mathrm{IDF}(t) = \log_{10}{\frac{numberOfDocuments}{documentFrequency[t]}}
+\end{eqnarray*}
+
+donde t es un termino y d un documento.
+
+\end{frame}
+
+\begin{frame}{TF\_IDF}
+
+Cuando el programa empieza a correr se ejecuta el método \texttt{TF\_IDF.Compute()} del archivo
+\texttt{TF\_IDF.cs}. Este método lee el texto de cada documento que aparece en la carpeta \emph{Content} y de el
+extrae todas las palabras. Se calcula el \texttt{TF\_IDF} para cada palabra en cada documento
+
+\end{frame}
+
+\subsection{Calculo del score}
+
+\begin{frame}{Calculo del score}
+    
+    Luego que la aplicación inicie, cuando se realize una consulta ( búsqueda ), se calcula el tf-idf para la consulta y se compara con el tf-idf de cada documento dandole una puntuación a cada uno y devolviendo una lista con los nombres de los documentos que más relevancia tienen. La puntuación sería el coseno del ángulo entre el vector formado con el tf-idf de la consulta y el tf-idf del documento. La similitud de los documentos es mayor mientras mas se acerca a $1$ el coseno del angulo entre ellos, visto de otra forma mientras mas pequeño es el angulo entre ambos.
+    
+\end{frame}
+
+\subsection{Funcionalidades extras}
+
+\begin{frame}{Sugerencia}
+    Otra funcionalidad del Moogle! es que dará una sugerencia de búsqueda en caso de que el usuario quizás cometió un error al escribir la consulta. Para esto usamos un algoritmo de Edit Distance conocido como \href{https://es.wikipedia.org/wiki/Distancia_de_Levenshtein}{\textcolor{blue}{Levenshtein distance}} y a este costo lo dividimos por el prefijo comun mas largo.
+    
+\end{frame}
+
+\end{document}

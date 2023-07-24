@@ -199,7 +199,7 @@ public static void Compute()
     método \texttt{TF\_IDF.ComputeQueryTF\_IDF()} y se compara con el TF\_IDF de cada documento dandole
     una puntuación a cada uno y devolviendo una lista con los nombres de los documentos que más
     relevancia tienen. La puntuación sería el coseno del ángulo entre el vector formado con el TF\_IDF de la
-    consulta y el TF\_IDF del documento. La similitud de los documentos depende es mayor mientras mas
+    consulta y el TF\_IDF del documento. La similitud de los documentos es mayor mientras mas
     se acerca a 1 el coseno del angulo entre ellos, visto de otra forma mientras mas pequeño es el angulo
     entre ambos. Para esto se utilizan dos fórmulas de dot product. Para dos vectores a y b: $dotProduct
     = a_1 * b_1 + a_2 * b_2 + ... + a_n* b_n$ , $dotProduct = \cos(a,b) * |a|*|b|$.
@@ -265,7 +265,7 @@ del documento con la consulta.
 
 Otra funcionalidad del Moogle! es que dará una sugerencia de búsqueda en caso de que el usuario quizás
 cometió un error al escribir la consulta. Para esto usamos un algoritmo de Edit Distance conocido como
-Levenshtein distance y a este costo le dividimos por el Longest Common Prefix. El propósito de este último
+Levenshtein distance y a este costo lo dividimos por el Longest Common Prefix. El propósito de este último
 proviene de la idea de que es más probable equivocarse en las últimas letras que en las primeras. Así distra
 está más cerca de dijkstra que de citra.
 
