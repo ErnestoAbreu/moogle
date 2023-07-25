@@ -82,8 +82,8 @@ help(){
     echo "run:              ejectutar el proyecto"
     echo "report:           compilar y generar el pdf del informe"
     echo "slides:           compilar y generar el pdf de la presentación"
-    echo "show_report:      visualizar el informe"
-    echo "show_slides:      visualizar la presentación"
+    echo "show_report:      visualizar el informe. Esta opción puede recibir como parámetro el comando de la herramienta de visualización que se quiera utilizar."
+    echo "show_slides:      visualizar la presentación. Esta opción puede recibir como parámetro el comando de la herramienta de visualización que se quiera utilizar."
     echo "clean:            eliminar ficheros auxiliares que se generan en la compilación o ejecución del proyecto, o en la generación de los pdfs del informe o la presentación"
     echo "help:             muestra este texto"
     echo "clear:            limpia la consola"
@@ -94,8 +94,13 @@ cd ..
 
 help
 
-while read command ; 
+while read input ; 
 do 
+    command=$(echo "$input" | cut -d' ' -f1)
+    arg=$(echo "$input" | cut -d' ' -f2) 
+
+    # echo $command
+    # echo $arg
 
     case $command in 
         run)
@@ -111,11 +116,19 @@ do
             ;;
         
         show_report)
-            show_report
+            if [ "$command" == "$arg" ]; then
+                show_report
+            else
+                show_report "$arg"
+            fi
             ;;
         
         show_slides)
-            show_slides
+            if [ "$command" == "$arg" ]; then
+                show_slides
+            else
+                show_slides "$arg"
+            fi
             ;;
         
         clean)
